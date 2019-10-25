@@ -8,19 +8,26 @@ namespace BankManagement
     {
         static void Main(string[] args)
         {
+            // Call the transact method that performs all the operation of the project
             TransactCustomer();           
         }
+        
+        // Gets the Details of the Customer i.e the AccountNumber and the Amount to be transacted
+        // This method then calls the WriteCustomer method that WriteLines the customers infor whose transaction has been done
         public static void TransactCustomer()
         {
-
+             // Get Customer AccountNumber, in Practice, the AccountNumber will be gotten by the system after swiping your card
             Console.WriteLine("Enter Customer AccountNumber");
             long customerAccountNumber = long.Parse(Console.ReadLine());
+            
+            //Same as in Practice where you are need to key in the Amount you need to WithDraw
             Console.WriteLine("Enter the Amount to Withdraw");
             decimal customerAmountWithDraw = decimal.Parse(Console.ReadLine());
             WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw));
 
         }
-
+        
+       // Gets a list of Customers as Parameters and WiteLines the customers important information
         public static void WriteCustomer(List<Customer> writecustomers)
         {
             foreach (var customer in writecustomers )
@@ -34,8 +41,13 @@ namespace BankManagement
                 Console.WriteLine();
             }
         }
+        
+        //This method simulates A database where we have a list of customers, each with their information.
+        //The Customer whose BankAccount is given will have their Bank Balance deducted by the recent transaction
+        //The method then returns the customer in previous line comment
         public static List<Customer> AddCustomers(long CustomerAccountNo, decimal CustomerMoneySpend)
         {
+            // list with two customers
             List<Customer> customers =  new List<Customer>()
             {
                  new Customer()
@@ -109,20 +121,27 @@ namespace BankManagement
 
             };
 
+            // Loops through each customer and fine the customer whose AccountNo is same as the supplied account number
+            //Then the transactions are done such that the amount ot  be deducted is done here
             foreach (var customer in customers)
             {
                 if (customer.AccountNumber == CustomerAccountNo )
                 {
+                    // Actual transaction is doen here 
                     customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
                                                           
                 }
                                
             }
+            
+            //Filtering out the exact customer whose transactiton have been done and return it in the next line
             var currentCustomer = customers.Where(c => c.AccountNumber == CustomerAccountNo).ToList();
             return currentCustomer;
         }
     }
 
+    
+    //Contains the properties for the customer with Relationships like Branch, Transactions and The Agent
     class Customer
     {
         public int Id { get; set; }
@@ -138,6 +157,8 @@ namespace BankManagement
 
 
     }
+    
+    // Contains the properties for transactions like Date, Balance e.t.c
     class Transactions
     {
         public int Id { get; set; }
@@ -149,6 +170,8 @@ namespace BankManagement
 
 
     }
+    
+    // The physical loaction for the Bank, 
     class Branch
     {
         public int Id { get; set; }
@@ -161,6 +184,8 @@ namespace BankManagement
         public string TownName { get; set; }
     }
 
+    
+    // The Agent who served the customer
     class Agent
     {
         public int Id { get; set; }
