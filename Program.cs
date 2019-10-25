@@ -9,6 +9,7 @@ namespace BankManagement
     {
         static void Main()
         {
+            // First go through the ReadMe File to work with this repo
             // Call the TransactCustomer method that performs all the operation of the project
             TransactCustomer();
         }
@@ -61,10 +62,10 @@ namespace BankManagement
             // Checks for Transfering money
             else if(typeofTransactiion == 4)
             {
+                Console.WriteLine("Enter the AccountNumber to Transfer To");
+                tranferAccountNumber = long.Parse(Console.ReadLine());
                 Console.WriteLine("Enter the Amount to Transfer");
                 customerAmountWithDraw = decimal.Parse(Console.ReadLine());
-                Console.WriteLine("Enter the Account to Transfer Money To");
-                tranferAccountNumber = long.Parse(Console.ReadLine());
                 WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
             }
            
