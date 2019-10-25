@@ -6,24 +6,63 @@ namespace BankManagement
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // Call the transact method that performs all the operation of the project
-            TransactCustomer();           
+            TransactCustomer();
+            Main();
         }
-        
+
+             
         // Gets the Details of the Customer i.e the AccountNumber and the Amount to be transacted
         // This method then calls the WriteCustomer method that WriteLines the customers infor whose transaction has been done
         public static void TransactCustomer()
         {
-             // Get Customer AccountNumber, in Practice, the AccountNumber will be gotten by the system after swiping your card
+            long customerAccountNumber;
+            int typeofTransactiion;
+            decimal customerAmountWithDraw;
+
+            // Get Customer AccountNumber, in Practice, the AccountNumber will be gotten by the system after swiping your card
+            Console.WriteLine("Please Select the Type of Transction");
+            Console.WriteLine("1. WithDraw");
+            Console.WriteLine("2. Depost");
+            Console.WriteLine("3. Check Balance");
+            Console.WriteLine("4. Transfer");
+            typeofTransactiion = int.Parse(Console.ReadLine());
+
             Console.WriteLine("Enter Customer AccountNumber");
-            long customerAccountNumber = long.Parse(Console.ReadLine());
+            customerAccountNumber = long.Parse(Console.ReadLine());
+          
+            if(typeofTransactiion ==1)
+            {
+                Console.WriteLine("Enter the Amount to WithDraw");
+                customerAmountWithDraw = decimal.Parse(Console.ReadLine());
+                WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
+            }
+            else if(typeofTransactiion == 2)
+            {
+                Console.WriteLine("Enter the Amount To Deposit");
+                customerAmountWithDraw = decimal.Parse(Console.ReadLine());
+                WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
+            }
+            else if(typeofTransactiion == 3)
+            {
+                customerAmountWithDraw = 0;
+                WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
+            }
+            else if(typeofTransactiion == 4)
+            {
+                Console.WriteLine("Enter the Amount to Transfer");
+                customerAmountWithDraw = decimal.Parse(Console.ReadLine());
+                WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
+            }
+           
             
             //Same as in Practice where you are need to key in the Amount you need to WithDraw
-            Console.WriteLine("Enter the Amount to Withdraw");
-            decimal customerAmountWithDraw = decimal.Parse(Console.ReadLine());
-            WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw));
+          
+
+
+            
 
         }
         
@@ -45,7 +84,7 @@ namespace BankManagement
         //This method simulates A database where we have a list of customers, each with their information.
         //The Customer whose BankAccount is given will have their Bank Balance deducted by the recent transaction
         //The method then returns the customer in previous line comment
-        public static List<Customer> AddCustomers(long CustomerAccountNo, decimal CustomerMoneySpend)
+        public static List<Customer> AddCustomers(long CustomerAccountNo, decimal CustomerMoneySpend, int typeofTranaction)
         {
             // list with two customers
             List<Customer> customers =  new List<Customer>()
@@ -125,13 +164,33 @@ namespace BankManagement
             //Then the transactions are done such that the amount ot  be deducted is done here
             foreach (var customer in customers)
             {
-                if (customer.AccountNumber == CustomerAccountNo )
+
+                if ((customer.AccountNumber == CustomerAccountNo) &&(typeofTranaction == 1) )
                 {
                     // Actual transaction is doen here 
                     customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
                                                           
                 }
-                               
+                 else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 2))
+                {
+                    // Actual transaction is doen here 
+                    customer.Transaction.Balance = customer.Transaction.Balance + CustomerMoneySpend;
+
+                }
+                 else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 3))
+                {
+                    // Actual transaction is doen here 
+                    customer.Transaction.Balance = customer.Transaction.Balance ;
+
+                }
+               else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 4))
+                {
+                    // Actual transaction is doen here 
+                    // customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
+                    customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
+
+                }
+
             }
             
             //Filtering out the exact customer whose transactiton have been done and return it in the next line
