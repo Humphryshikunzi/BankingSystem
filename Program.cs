@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace BankManagement
@@ -8,21 +9,20 @@ namespace BankManagement
     {
         static void Main()
         {
-            // Call the transact method that performs all the operation of the project
+            // Call the TransactCustomer method that performs all the operation of the project
             TransactCustomer();
-            Main();
         }
 
-             
         // Gets the Details of the Customer i.e the AccountNumber and the Amount to be transacted
         // This method then calls the WriteCustomer method that WriteLines the customers infor whose transaction has been done
         public static void TransactCustomer()
         {
-            long customerAccountNumber;
+            // initialise variables
+            long customerAccountNumber, tranferAccountNumber;
             int typeofTransactiion;
             decimal customerAmountWithDraw;
 
-            // Get Customer AccountNumber, in Practice, the AccountNumber will be gotten by the system after swiping your card
+            // WriteLines list of Types of Transactions from which the Customer will select the type of transaction
             Console.WriteLine("Please Select the Type of Transction");
             Console.WriteLine("1. WithDraw");
             Console.WriteLine("2. Depost");
@@ -30,40 +30,44 @@ namespace BankManagement
             Console.WriteLine("4. Transfer");
             typeofTransactiion = int.Parse(Console.ReadLine());
 
+            // Get Customer AccountNumber, in Practice, the AccountNumber will be gotten by the system after swiping your card
             Console.WriteLine("Enter Customer AccountNumber");
             customerAccountNumber = long.Parse(Console.ReadLine());
           
+            
+            // Checks for WithDrawing money
             if(typeofTransactiion ==1)
             {
                 Console.WriteLine("Enter the Amount to WithDraw");
                 customerAmountWithDraw = decimal.Parse(Console.ReadLine());
                 WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
             }
+
+            //Checks for Depositing Money
             else if(typeofTransactiion == 2)
             {
                 Console.WriteLine("Enter the Amount To Deposit");
                 customerAmountWithDraw = decimal.Parse(Console.ReadLine());
                 WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
             }
+
+            //Checks Balance
             else if(typeofTransactiion == 3)
             {
                 customerAmountWithDraw = 0;
                 WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
             }
+
+            // Checks for Transfering money
             else if(typeofTransactiion == 4)
             {
                 Console.WriteLine("Enter the Amount to Transfer");
                 customerAmountWithDraw = decimal.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the Account to Transfer Money To");
+                tranferAccountNumber = long.Parse(Console.ReadLine());
                 WriteCustomer(AddCustomers(customerAccountNumber, customerAmountWithDraw, typeofTransactiion));
             }
            
-            
-            //Same as in Practice where you are need to key in the Amount you need to WithDraw
-          
-
-
-            
-
         }
         
        // Gets a list of Customers as Parameters and WiteLines the customers important information
@@ -86,7 +90,7 @@ namespace BankManagement
         //The method then returns the customer in previous line comment
         public static List<Customer> AddCustomers(long CustomerAccountNo, decimal CustomerMoneySpend, int typeofTranaction)
         {
-            // list with two customers
+            // List with two customers
             List<Customer> customers =  new List<Customer>()
             {
                  new Customer()
@@ -160,35 +164,34 @@ namespace BankManagement
 
             };
 
-            // Loops through each customer and fine the customer whose AccountNo is same as the supplied account number
+            // Loops through each customer and find the customer whose AccountNo is same as the supplied account number
             //Then the transactions are done such that the amount ot  be deducted is done here
             foreach (var customer in customers)
             {
 
                 if ((customer.AccountNumber == CustomerAccountNo) &&(typeofTranaction == 1) )
                 {
-                    // Actual transaction is doen here 
+                    // WithDraw
                     customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
                                                           
                 }
                  else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 2))
                 {
-                    // Actual transaction is doen here 
+                    // Deposit
                     customer.Transaction.Balance = customer.Transaction.Balance + CustomerMoneySpend;
 
                 }
                  else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 3))
                 {
-                    // Actual transaction is doen here 
+                    // Balance 
                     customer.Transaction.Balance = customer.Transaction.Balance ;
 
                 }
                else if ((customer.AccountNumber == CustomerAccountNo) && (typeofTranaction == 4))
                 {
-                    // Actual transaction is doen here 
-                    // customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
-                    customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
-
+                    // Transfer
+                    //Code to transfer the cash will be written here
+                     customer.Transaction.Balance = customer.Transaction.Balance - CustomerMoneySpend;
                 }
 
             }
@@ -203,6 +206,7 @@ namespace BankManagement
     //Contains the properties for the customer with Relationships like Branch, Transactions and The Agent
     class Customer
     {
+        [Key]
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -213,26 +217,26 @@ namespace BankManagement
         public Branch Branch { get; set; }
         public string HudumaNumber { get; set; }
         public Agent Agent { get; set; }
-
-
+      
     }
     
     // Contains the properties for transactions like Date, Balance e.t.c
     class Transactions
     {
+        [Key]
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }
         public Branch Location { get; set; }
         public Agent MyProperty { get; set; }
         public decimal Balance { get; set; }
-
-
+        
     }
     
     // The physical loaction for the Bank, 
     class Branch
     {
+        [Key]
         public int Id { get; set; }
         public string BranchName { get; set; }
         public string Manager { get; set; }
@@ -241,12 +245,14 @@ namespace BankManagement
         public double Lon { get; set; }
         public double Lat { get; set; }
         public string TownName { get; set; }
+
     }
 
     
     // The Agent who served the customer
     class Agent
     {
+        [Key]
         public int Id { get; set; }
         public long NationalId { get; set; }
         public string FirstName { get; set; }
